@@ -24,3 +24,46 @@ int Mine::get_mineState(){
 void Mine::detonate(){
     mineState = 1;
 }
+
+//Board Definitions
+
+//Constructor
+Board::Board(std::string gameMode){
+    if (gameMode == "easy"){
+        boardDimensions = {9, 9};
+        numberOfMines = 10;
+    };
+    if (gameMode == "medium"){
+        boardDimensions = {16, 16};
+        numberOfMines = 40;
+    };
+    if (gameMode == "hard"){
+        boardDimensions = {30, 16};
+        numberOfMines = 99;
+    };
+}
+
+//Function Definitions
+std::vector<int> Board::get_boardDimensions(){
+    return boardDimensions;
+}
+
+int Board::get_numberOfMines(){
+    return numberOfMines;
+}
+
+void Board::displayBoard(){
+    
+}
+
+
+
+
+
+
+//Game Definitions
+
+//Constructor
+Game::Game(std::string mode){
+    gameMode = mode;
+}

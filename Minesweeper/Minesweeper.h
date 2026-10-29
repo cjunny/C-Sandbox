@@ -24,7 +24,6 @@ class Mine{
 
 class Board{
     private:
-    std::string gameMode;
     std::vector<int> boardDimensions;
     int numberOfMines;
     std::vector<std::vector<int>> uncoveredSquares = {};
@@ -49,4 +48,14 @@ class Flag{
     std::vector<int> get_flagLocation();
     void squareImmunity(); //prevents user from selecting a square with a flag on it
 
+};
+
+class Game{
+    private:
+    std::string gameMode;
+    int gameScore; //0 means you won, 1 means you lost
+
+    public:
+    Game(std::string mode);
+    std::string get_gameMode();
 };
