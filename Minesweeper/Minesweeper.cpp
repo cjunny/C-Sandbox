@@ -103,25 +103,46 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
         int arraySize = static_cast<int>(coordinateArray.size());
         int mine = 0;
         int mineLocation;
-        bool shouldBreakAll = false;
-        int indexToRemove;
-        std::vector<std::vector<int>> mineLocations; 
+        int indexToRemove; 
         //loop ends when all mines are created
         while (mine < numberOfMines){
             //randomnly generate a number from the size of the vector
             //the coordinate indexed at the rng is a mine
             mineLocation = generateRandomNumber(0, arraySize);
-            for(int i = 0; i < height; ++i){
+            bool shouldBreakAll = false;
+            int mineRow = coordinateArray[mineLocation][0];
+            int mineCol = coordinateArray[mineLocation][1];
+            boardSquares[mineRow][mineCol].mineSquare();
+
+            for (int mineAdjRow = mineRow - 1; mineAdjRow < mineRow + 2; ++mineAdjRow){//in this loop make sure the square with a mine doesn't get counted
+                for (int mineAdjCol = mineCol - 1; mineAdjCol < mineCol + 2; ++mineAdjCol){
+                    if(mineAdjRow >= 0 && mineAdjRow < height && mineAdjCol >= 0 && mineAdjCol < width){//checks if coordinates are a valid square
+                        if(boardSquares[mineAdjRow][mineAdjCol].get_isMine() == true){
+                            continue;
+                        }
+                        boardSquares[mineAdjRow][mineAdjCol].updateAdjacentMines();
+                    }
+                }
+            }
+                                
+            //remove that coordinate from the coordinate vector
+            coordinateArray.erase(coordinateArray.begin() + mineLocation);
+            arraySize = arraySize - 1;
+            ++mine;
+
+            /*for(int i = 0; i < height; ++i){
                 for(int j = 0; j < width; ++j){
                     if(coordinateArray[mineLocation] == boardSquares[i][j].get_squareLocation()){
                         //change that square to a mine
                         boardSquares[i][j].mineSquare(); //changes the square to a mine
-                        mineLocations.push_back(coordinateArray[mineLocation]);
-                        for (int mineRow = coordinateArray[mineLocation][mineRow] - 1; mineRow < coordinateArray[mineLocation][mineRow] + 2; ++mineRow){//in this loop make sure mine square doesn't change
-                            for (int mineCol = coordinateArray[mineLocation][mineCol] - 1; mineRow < coordinateArray[mineLocation][mineCol] + 2; ++mineCol){
-                                if(boardSquares[mineRow][mineCol].get_isMine() == false){
-                                    boardSquares[mineRow][mineCol].updateAdjacentMines();
-                                }
+                        //takes location of mine and updates adjacent square count of surrounding mines
+                        //if square is a mine, does not add a count
+                        for (int mineRow = coordinateArray[mineLocation][0] - 1; mineRow < coordinateArray[mineLocation][0] + 2; ++mineRow){//in this loop make sure mine square doesn't change
+                            for (int mineCol = coordinateArray[mineLocation][1] - 1; mineRow < coordinateArray[mineLocation][1] + 2; ++mineCol){
+                                if(mineRow >= 0 && mineRow < height && mineCol >= 0 && mineCol < width)
+                                    if(boardSquares[mineRow][mineCol].get_isMine() == false){
+                                        boardSquares[mineRow][mineCol].updateAdjacentMines();
+                                    }
                             }
                         }
                         shouldBreakAll = true;
@@ -132,22 +153,9 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
                 if(shouldBreakAll){
                     break;
                 }
-            }
-            //remove that coordinate from the coordinate vector
-            indexToRemove = mineLocation;
-            coordinateArray.erase(coordinateArray.begin() + indexToRemove);
-            arraySize = arraySize - 1;
-            ++mine;
-        }
-
-        //Now that mines are placed, find and assign number of adjacent mines to squares
-        //Find where the mines are (go back and create a separate array with coordinate of mines)
-        //At each mine location, add 1 to every adjacent square
-        for (int i = 0; i < numberOfMines; ++i){
-            for (int mineRow = mineLocations[i][mineRow] - 1; mineRow < mineLocations[i][mineRow] + 1; ++mineRow)
+            }*/
         }
     }
-
 }
 
 //Function Definitions
