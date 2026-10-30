@@ -15,14 +15,21 @@ class Square{//square on the board
 
     public:
     //Constructor
-    Square(std::vector<int> coordinates);
+    Square() = default;
+    //Square(std::vector<int> coordinates);
+
+    //Getters
+    std::vector<int> get_squareLocation();
+    bool get_isMine();
+    bool get_isFlag();
+    bool get_isUncovered();
 
     //Functions
-    std::vector<int> get_squareLocation();
+    void setLocation(std::vector<int> coordinates);
     void flagSquare();
     void mineSquare();
     void uncoverSquare();
-    void updateAdjacentMines();
+    void updateAdjacentMines(); //adds 1 to adjacentMines
 
 };
 

@@ -15,18 +15,32 @@ int generateRandomNumber(int firstRange, int lastRange){ //Generates random numb
 }
 
 
-//Square definitions
-Square::Square(std::vector<int> coordinates){
-    squareLocation = coordinates;
-    for (const int& num: {coordinates[0] - 1, coordinates[0], coordinates[0] + 1}){
-        for (const int& num2: {coordinates[1] - 1, coordinates[1], coordinates[1] + 1}){
-            if ()//check surrounding squares for mines and increment adjacentMines if there is a mine
-        }
-    }
+//Constructor
+//Square::Square(std::vector<int> coordinates){
+    //squareLocation = coordinates;
+//}
+
+//Getters
+
+bool Square::get_isMine(){
+    return isMine;
 }
+
+bool Square::get_isFlag(){
+    return isFlag;
+}
+bool Square::get_isUncovered(){
+    return isUncovered;
+}
+
+//Square definitions
 
 std::vector<int> Square::get_squareLocation(){
     return squareLocation;
+}
+
+void Square::setLocation(std::vector<int> coordinates){
+    squareLocation = coordinates;
 }
 
 void Square::flagSquare(){
@@ -35,6 +49,14 @@ void Square::flagSquare(){
 
 void Square::mineSquare(){
     isMine = true;
+}
+
+void Square::uncoverSquare(){
+    isUncovered = true;
+}
+
+void Square::updateAdjacentMines(){
+    ++adjacentMines;
 }
 
 //Board Definitions
@@ -73,6 +95,7 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
         for(int i = 0; i < height; ++i){
             for(int j = 0; j < width; ++j){
                 coordinate = {i,j};
+                boardSquares[i][j].setLocation(coordinate);
                 coordinateArray.push_back(coordinate);
             }
         }
@@ -82,6 +105,7 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
         int mineLocation;
         bool shouldBreakAll = false;
         int indexToRemove;
+        std::vector<std::vector<int>> mineLocations; 
         //loop ends when all mines are created
         while (mine < numberOfMines){
             //randomnly generate a number from the size of the vector
@@ -89,9 +113,17 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
             mineLocation = generateRandomNumber(0, arraySize);
             for(int i = 0; i < height; ++i){
                 for(int j = 0; j < width; ++j){
-                    if(coordinateArray[mineLocation] == boardSquares[i][j].get_squareLocation()){//the squares in boardSquares, don't have coordinates because they weren't constructed...
+                    if(coordinateArray[mineLocation] == boardSquares[i][j].get_squareLocation()){
                         //change that square to a mine
                         boardSquares[i][j].mineSquare(); //changes the square to a mine
+                        mineLocations.push_back(coordinateArray[mineLocation]);
+                        for (int mineRow = coordinateArray[mineLocation][mineRow] - 1; mineRow < coordinateArray[mineLocation][mineRow] + 2; ++mineRow){//in this loop make sure mine square doesn't change
+                            for (int mineCol = coordinateArray[mineLocation][mineCol] - 1; mineRow < coordinateArray[mineLocation][mineCol] + 2; ++mineCol){
+                                if(boardSquares[mineRow][mineCol].get_isMine() == false){
+                                    boardSquares[mineRow][mineCol].updateAdjacentMines();
+                                }
+                            }
+                        }
                         shouldBreakAll = true;
                         break;
                     }
@@ -111,6 +143,9 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
         //Now that mines are placed, find and assign number of adjacent mines to squares
         //Find where the mines are (go back and create a separate array with coordinate of mines)
         //At each mine location, add 1 to every adjacent square
+        for (int i = 0; i < numberOfMines; ++i){
+            for (int mineRow = mineLocations[i][mineRow] - 1; mineRow < mineLocations[i][mineRow] + 1; ++mineRow)
+        }
     }
 
 }
