@@ -5,35 +5,41 @@
 #include <string>
 
 
-class Mine{
+class Square{//square on the board
     private:
-    std::vector<int> location; // two integers with row and column location, first integer is row, second is column
-    int mineState = 0; //"0" means not detonated, "1" means detonated
+    std::vector<int> squareLocation; //two integers with row and column location, first integer is row, second is column
+    bool isMine = false; //"false" means no mine, "true" means mine
+    bool isFlag = false; //"false" means no flag, "true" means flag
+    bool isUncovered = false; //"false" means covered, "true" means uncovered
+    int adjacentMines = 0; //number of mines surrounding the square
 
     public:
     //Constructor
-    Mine(std::vector<int> coordiantes);
+    Square(std::vector<int> coordinates);
 
-    //Getter functions
-    std::vector<int> get_location();
-    int get_mineState();
-
-    void detonate();
+    void flagSquare();
+    void mineSquare();
+    void uncoverSquare();
+    void updateAdjacentMines();
 
 };
 
+
 class Board{
     private:
-    std::vector<int> boardDimensions;
+    std::vector<std::vector<Square>> boardSquares = {}; //2D vector of squares that make up the board
+    int width; //width of the board
+    int height; //height of the board
     int numberOfMines;
-    std::vector<std::vector<int>> uncoveredSquares = {};
 
     public:
     //Constructor
-    Board(std::string gameMode);
+    Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates,
+    // and make the squares constructed with those coordinates into mines
 
-    std::vector<int> get_boardDimensions();
     int get_numberOfMines();
+    int get_width();
+    int get_height();
 
     void displayBoard(); //generates board with flags and open squares
     void placeMines();
@@ -53,7 +59,7 @@ class Flag{
 class Game{
     private:
     std::string gameMode;
-    int gameScore; //0 means you won, 1 means you lost
+    bool gameScore; //0 means you won, 1 means you lost
 
     public:
     Game(std::string mode);
