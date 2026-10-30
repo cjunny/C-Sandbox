@@ -17,6 +17,8 @@ class Square{//square on the board
     //Constructor
     Square(std::vector<int> coordinates);
 
+    //Functions
+    std::vector<int> get_squareLocation();
     void flagSquare();
     void mineSquare();
     void uncoverSquare();
