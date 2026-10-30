@@ -32,6 +32,9 @@ bool Square::get_isFlag(){
 bool Square::get_isUncovered(){
     return isUncovered;
 }
+int Square::get_adjacentMines(){
+    return adjacentMines;
+}
 
 //Square definitions
 
@@ -82,6 +85,7 @@ Board::Board(std::string gameMode){
 //Declare square instances in board
 
 boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(width));
+std::vector<std::vector<int>> allMineLocations;
 
 //use curly to erase coordinateArray when finished
 
@@ -102,14 +106,13 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
 
         int arraySize = static_cast<int>(coordinateArray.size());
         int mine = 0;
-        int mineLocation;
-        int indexToRemove; 
+        int mineLocation; 
         //loop ends when all mines are created
         while (mine < numberOfMines){
             //randomnly generate a number from the size of the vector
             //the coordinate indexed at the rng is a mine
-            mineLocation = generateRandomNumber(0, arraySize);
-            bool shouldBreakAll = false;
+            mineLocation = generateRandomNumber(0, arraySize - 1);
+            allMineLocations.push_back(coordinateArray[mineLocation]);
             int mineRow = coordinateArray[mineLocation][0];
             int mineCol = coordinateArray[mineLocation][1];
             boardSquares[mineRow][mineCol].mineSquare();
@@ -159,6 +162,10 @@ boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(widt
 }
 
 //Function Definitions
+std::vector<std::vector<Square>> Board::get_boardSquares(){
+    return boardSquares;
+}
+
 int Board::get_width(){
     return width;
 }
@@ -172,17 +179,95 @@ int Board::get_numberOfMines(){
 }
 
 void Board::displayBoard(){
-    
+    for (int row = 0; row < height; ++row){
+        for (int col = 0; col < width; ++col){
+            if(boardSquares[row][col].get_isUncovered() == true){
+                if (boardSquares[row][col].get_adjacentMines() == 0)
+                {
+                    std::cout << 'C';
+                }
+                
+                std::cout << boardSquares[row][col].get_adjacentMines();
+            }
+            if(boardSquares[row][col].get_isFlag() == true){
+                std::cout << 'F';
+            }
+            std::cout << 'O';//covered square
+        }
+        std::cout << '\n';
+    }
 }
-
-
-
-
-
 
 //Game Definitions
 
 //Constructor
 Game::Game(std::string mode){
     gameMode = mode;
+}
+
+//Functions
+std::string Game::get_gameMode(){
+    return gameMode;
+}
+
+bool Game::get_gameState(){
+    return gameState;
+}
+
+int Game::get_minesFound(){
+    return minesFound;
+}
+
+int Game::get_minesLeft(){
+    return minesLeft;
+}
+
+void Game::updateMinesFound(){
+    ++minesFound;
+}
+
+void Game::promptUser(){
+    std::cout << "You will be prompted to enter a row and column number to select a square." << std::endl;
+    std::cout << "Then you will be prompted to enter the action you would like for that square." << std::endl;
+    std::cout << "You can choose F to flag the square or C to click it" << std::endl;
+    std::cout << "Enter the row" << std::endl;
+    std::cin >> userRow;
+    std::cout << "Enter the column" << std::endl;
+    std::cin >> userCol;
+    std::cout << "Enter your action" << std::endl;
+    std::cin >> userAction;
+}
+
+void Game::userSelectsMine(){
+    gameState = false;
+    std::cout << "You selected a mine. You lose" << std::endl;
+}
+
+void Game::userFlags(Board& userBoard){
+    userBoard.get_boardSquares()[userRow][userCol].flagSquare();
+}
+
+void Game::userSelectsSafeSquare(Board& userBoard){//add recursion
+    userBoard.get_boardSquares()[userRow][userCol].uncoverSquare();
+    int rowSearch = userBoard.get_boardSquares()[userRow][userCol].get_squareLocation()[0];
+    int colSearch = userBoard.get_boardSquares()[userRow][userCol].get_squareLocation()[1];
+    for (int i = rowSearch - 1; i < rowSearch + 2; ++i){
+        for (int j = colSearch - 1; j < colSearch + 2; ++j){
+            if (userBoard.get_boardSquares()[rowSearch][colSearch].get_isMine() == false){
+                userSelectsSafeSquare(userBoard);
+            }
+        }
+    }
+}
+
+void Game::executeUserCommand(Board& userBoard){
+    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true){
+        userSelectsMine();
+    }
+    if (userAction == 'F'){
+        userFlags(userBoard);
+    }
+    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
+        userSelectsSafeSquare(userBoard);
+    }
 }

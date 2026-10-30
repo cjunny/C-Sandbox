@@ -23,6 +23,7 @@ class Square{//square on the board
     bool get_isMine();
     bool get_isFlag();
     bool get_isUncovered();
+    int get_adjacentMines();
 
     //Functions
     void setLocation(std::vector<int> coordinates);
@@ -46,6 +47,8 @@ class Board{
     Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates,
     // and make the squares constructed with those coordinates into mines
 
+    std::vector<std::vector<Square>> get_boardSquares();
+    
     int get_numberOfMines();
     int get_width();
     int get_height();
@@ -68,9 +71,25 @@ class Flag{
 class Game{
     private:
     std::string gameMode;
-    bool gameScore; //0 means you won, 1 means you lost
+    bool gameState = true; //0 means game over, 1 means still going (true)
+    int minesLeft;
+    int minesFound = 0;
+    int userRow;
+    int userCol;
+    char userAction;
 
     public:
     Game(std::string mode);
     std::string get_gameMode();
+    bool get_gameState();
+    int get_minesLeft();
+    int get_minesFound();
+
+    void updateMinesFound();
+    void promptUser();//prompts user to pick a square and specify
+
+    void userSelectsMine();
+    void userFlags(Board& userBoard);
+    void userSelectsSafeSquare(Board& userBoard);
+    void executeUserCommand(Board& userBoard);
 };
