@@ -37,6 +37,12 @@ Board::Board(std::string gameMode){
     };
 
     //Generate a vector with all possible coordinates of the board vector<vector<int>>
+    std::vector<std::vector<int>> coordinateArray;
+    coordinateArray.reserve(width*height); //allocates memory for all coordinates in the board
+    //use curly to erase coordinateArray when finished
+    //allocate memory for squares beforehand and use pointers inside curly brackets so that squares don't get erased
+
+
     //randomnly generate a number from the size of the vector
     //the coordinate indexed at the rng is a mine
     //change that square to a mine
@@ -44,7 +50,7 @@ Board::Board(std::string gameMode){
     //remove that coordinate from the coordinate vector
     //a while loop will control all this, loop ends when all mines are created
 
-    
+
 }
 
 //Function Definitions
