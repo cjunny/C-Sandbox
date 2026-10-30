@@ -36,9 +36,16 @@ Board::Board(std::string gameMode){
         numberOfMines = 99;
     };
 
+    //Allocate memory for squares in board
+
+    boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(width));
+
     //Generate a vector with all possible coordinates of the board vector<vector<int>>
-    std::vector<std::vector<int>> coordinateArray;
-    coordinateArray.reserve(width*height); //allocates memory for all coordinates in the board
+
+    {
+        std::vector<std::vector<int>> coordinateArray;
+        coordinateArray.reserve(width*height); //allocates memory for all coordinates in the board, coordinateArray is w*h spaces long
+    }
     //use curly to erase coordinateArray when finished
     //allocate memory for squares beforehand and use pointers inside curly brackets so that squares don't get erased
 

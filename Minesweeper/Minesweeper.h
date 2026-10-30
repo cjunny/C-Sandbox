@@ -42,8 +42,8 @@ class Board{
     int get_height();
 
     void displayBoard(); //generates board with flags and open squares
-    void placeMines();
-    void placeNumbers(); //places numbers that indicate how many mines surround the square
+    //void placeMines();
+    //void placeNumbers(); //places numbers that indicate how many mines surround the square
 };
 
 class Flag{
