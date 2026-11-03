@@ -253,8 +253,10 @@ void Game::userSelectsSafeSquare(Board& userBoard){//add recursion
     int colSearch = userBoard.get_boardSquares()[userRow][userCol].get_squareLocation()[1];
     for (int i = rowSearch - 1; i < rowSearch + 2; ++i){
         for (int j = colSearch - 1; j < colSearch + 2; ++j){
-            if (userBoard.get_boardSquares()[rowSearch][colSearch].get_isMine() == false){
-                userSelectsSafeSquare(userBoard);
+            if (i >= 0 && i < userBoard.get_height() && j >=0 && j < userBoard.get_width()){
+                if (userBoard.get_boardSquares()[rowSearch][colSearch].get_isMine() == false){
+                    userSelectsSafeSquare(userBoard);
+                }
             }
         }
     }

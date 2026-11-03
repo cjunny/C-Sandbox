@@ -14,9 +14,13 @@ int main(){
     std::cin >> mode;
     Game newGame(mode);
     Board newBoard(mode);
-    while (newGame.get_gameState()){
+    newBoard.displayBoard();
+    newGame.promptUser();
+    newGame.executeUserCommand(newBoard);
+
+    /*while (newGame.get_gameState()){
         newBoard.displayBoard();
-        newGame.promptUser();
-        newGame.executeUserCommand(newBoard);
-    }
+        /*newGame.promptUser();*/
+        /*newGame.executeUserCommand(newBoard);
+    }*/
 }
