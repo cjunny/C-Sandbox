@@ -86,6 +86,9 @@ class Game{
     int get_minesFound();
 
     void updateMinesFound();
+    void updateUserRow(int row);
+    void updateUserCol(int col);
+
     void promptUser();//prompts user to pick a square and specify
 
     void userSelectsMine();

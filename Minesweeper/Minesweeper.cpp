@@ -229,6 +229,14 @@ void Game::updateMinesFound(){
     ++minesFound;
 }
 
+void Game::updateUserRow(int row){
+    userRow = row;
+}
+
+void Game::updateUserCol(int col){
+    userCol = col;
+}
+
 void Game::promptUser(){
     std::cout << "You will be prompted to enter a row and column number to select a square." << std::endl;
     std::cout << "Then you will be prompted to enter the action you would like for that square." << std::endl;
@@ -257,7 +265,12 @@ void Game::userSelectsSafeSquare(Board& userBoard){//add recursion
     for (int i = rowSearch - 1; i < rowSearch + 2; ++i){
         for (int j = colSearch - 1; j < colSearch + 2; ++j){
             if (i >= 0 && i < userBoard.get_height() && j >=0 && j < userBoard.get_width()){
-                if (userBoard.get_boardSquares()[i][j].get_isMine() == false){
+                if (userBoard.get_boardSquares()[i][j].get_isUncovered() == true){
+                    continue;
+                }
+                else if (userBoard.get_boardSquares()[i][j].get_isMine() == false /*&& userBoard.get_boardSquares()[i][j].get_isUncovered() == false*/){
+                    updateUserRow(i);
+                    updateUserCol(j);
                     userSelectsSafeSquare(userBoard);
                 }
             }
@@ -269,10 +282,10 @@ void Game::executeUserCommand(Board& userBoard){
     if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true){
         userSelectsMine();
     }
-    if (userAction == 'F'){
+    else if (userAction == 'F'){
         userFlags(userBoard);
     }
-    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
+    else if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
         userSelectsSafeSquare(userBoard);
     }
 }
