@@ -186,13 +186,16 @@ void Board::displayBoard(){
                 {
                     std::cout << 'C';
                 }
-                
-                std::cout << boardSquares[row][col].get_adjacentMines();
+                else{
+                    std::cout << boardSquares[row][col].get_adjacentMines();
+                }
             }
-            if(boardSquares[row][col].get_isFlag() == true){
+            else if(boardSquares[row][col].get_isFlag() == true){
                 std::cout << 'F';
             }
-            std::cout << 'O';//covered square
+            else{
+                std::cout << 'O';//covered square
+            }
         }
         std::cout << '\n';
     }
@@ -254,7 +257,7 @@ void Game::userSelectsSafeSquare(Board& userBoard){//add recursion
     for (int i = rowSearch - 1; i < rowSearch + 2; ++i){
         for (int j = colSearch - 1; j < colSearch + 2; ++j){
             if (i >= 0 && i < userBoard.get_height() && j >=0 && j < userBoard.get_width()){
-                if (userBoard.get_boardSquares()[rowSearch][colSearch].get_isMine() == false){
+                if (userBoard.get_boardSquares()[i][j].get_isMine() == false){
                     userSelectsSafeSquare(userBoard);
                 }
             }
