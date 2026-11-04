@@ -258,22 +258,26 @@ void Game::userFlags(Board& userBoard){
     userBoard.get_boardSquares()[userRow][userCol].flagSquare();
 }
 
-void Game::userSelectsSafeSquare(Board& userBoard){//add recursion
-    userBoard.get_boardSquares()[userRow][userCol].uncoverSquare();
-    int rowSearch = userBoard.get_boardSquares()[userRow][userCol].get_squareLocation()[0];
-    int colSearch = userBoard.get_boardSquares()[userRow][userCol].get_squareLocation()[1];
-    for (int i = rowSearch - 1; i < rowSearch + 2; ++i){
-        for (int j = colSearch - 1; j < colSearch + 2; ++j){
-            if (i >= 0 && i < userBoard.get_height() && j >=0 && j < userBoard.get_width()){
-                if (userBoard.get_boardSquares()[i][j].get_isUncovered() == true){
-                    continue;
-                }
-                else if (userBoard.get_boardSquares()[i][j].get_isMine() == false /*&& userBoard.get_boardSquares()[i][j].get_isUncovered() == false*/){
-                    updateUserRow(i);
-                    updateUserCol(j);
-                    userSelectsSafeSquare(userBoard);
-                }
+void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
+    //Check if the square is inbounds
+    if (row < 0 || row > userBoard.get_height() - 1 || col < 0 || col > userBoard.get_width() - 1){ //user input will need to be how vectors are indexed
+        return;
+    }
+    //Check if the square is a flagged, mine, or uncovered
+    if (userBoard.get_boardSquares()[row][col].get_isMine() == true || userBoard.get_boardSquares()[row][col].get_isFlag() == true || userBoard.get_boardSquares()[row][col].get_isUncovered() == true){
+        return;
+    }
+
+    //uncover the square
+    userBoard.get_boardSquares()[row][col].uncoverSquare();
+
+    //Search adjacent squares
+    for (int i = row - 1; i <= row + 1; ++i){
+        for (int j = col - 1; j <= col + 1; ++j){
+            if (i == row && j == col){
+                continue;
             }
+            userSelectsSafeSquare(userBoard, i, j); //continue; stack overflow is happening needs work
         }
     }
 }
@@ -286,6 +290,6 @@ void Game::executeUserCommand(Board& userBoard){
         userFlags(userBoard);
     }
     else if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
-        userSelectsSafeSquare(userBoard);
+        userSelectsSafeSquare(userBoard, userRow, userCol);
     }
 }

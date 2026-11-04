@@ -93,6 +93,6 @@ class Game{
 
     void userSelectsMine();
     void userFlags(Board& userBoard);
-    void userSelectsSafeSquare(Board& userBoard);
+    void userSelectsSafeSquare(Board& userBoard, int row, int col);
     void executeUserCommand(Board& userBoard);
 };
