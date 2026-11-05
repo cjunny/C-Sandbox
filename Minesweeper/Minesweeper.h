@@ -47,7 +47,7 @@ class Board{
     Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates,
     // and make the squares constructed with those coordinates into mines
 
-    std::vector<std::vector<Square>> get_boardSquares();
+    std::vector<std::vector<Square>> &get_boardSquares();
     
     int get_numberOfMines();
     int get_width();

@@ -162,7 +162,7 @@ std::vector<std::vector<int>> allMineLocations;
 }
 
 //Function Definitions
-std::vector<std::vector<Square>> Board::get_boardSquares(){
+std::vector<std::vector<Square>> &Board::get_boardSquares(){
     return boardSquares;
 }
 
@@ -277,7 +277,7 @@ void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
             if (i == row && j == col){
                 continue;
             }
-            userSelectsSafeSquare(userBoard, i, j); //continue; stack overflow is happening needs work
+            userSelectsSafeSquare(userBoard, i, j); //continue; stack overflow is happening needs work, 11/5 code is going back and forth between two squares
         }
     }
 }
