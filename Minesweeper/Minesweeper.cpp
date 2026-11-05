@@ -162,7 +162,7 @@ std::vector<std::vector<int>> allMineLocations;
 }
 
 //Function Definitions
-std::vector<std::vector<Square>> &Board::get_boardSquares(){
+std::vector<std::vector<Square>> Board::get_boardSquares(){
     return boardSquares;
 }
 
@@ -201,6 +201,21 @@ void Board::displayBoard(){
     }
 }
 
+void Board::setSquareFlag(int row, int col){
+    boardSquares[row][col].flagSquare();
+}
+
+void Board::setSquareMine(int row, int col){
+    boardSquares[row][col].mineSquare();
+}
+
+void Board::setSquareUncover(int row, int col){
+    boardSquares[row][col].uncoverSquare();
+}
+
+void Board::setSquareAdjacentMines(int row, int col){
+    boardSquares[row][col].updateAdjacentMines();
+}
 //Game Definitions
 
 //Constructor
@@ -238,6 +253,7 @@ void Game::updateUserCol(int col){
 }
 
 void Game::promptUser(){
+    std::cout << "Mines Found: " << minesFound << std::endl;
     std::cout << "You will be prompted to enter a row and column number to select a square." << std::endl;
     std::cout << "Then you will be prompted to enter the action you would like for that square." << std::endl;
     std::cout << "You can choose F to flag the square or C to click it" << std::endl;
@@ -254,8 +270,8 @@ void Game::userSelectsMine(){
     std::cout << "You selected a mine. You lose" << std::endl;
 }
 
-void Game::userFlags(Board& userBoard){
-    userBoard.get_boardSquares()[userRow][userCol].flagSquare();
+void Game::userFlags(Board& userBoard, int row, int col){
+    userBoard.setSquareFlag(row, col);
 }
 
 void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
@@ -263,13 +279,17 @@ void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
     if (row < 0 || row > userBoard.get_height() - 1 || col < 0 || col > userBoard.get_width() - 1){ //user input will need to be how vectors are indexed
         return;
     }
-    //Check if the square is a flagged, mine, or uncovered
+    //Check if the square is a flagged, mine, uncovered
     if (userBoard.get_boardSquares()[row][col].get_isMine() == true || userBoard.get_boardSquares()[row][col].get_isFlag() == true || userBoard.get_boardSquares()[row][col].get_isUncovered() == true){
         return;
     }
 
     //uncover the square
-    userBoard.get_boardSquares()[row][col].uncoverSquare();
+    userBoard.setSquareUncover(row, col);
+
+    if (userBoard.get_boardSquares()[row][col].get_adjacentMines() > 0){
+        return;
+    }
 
     //Search adjacent squares
     for (int i = row - 1; i <= row + 1; ++i){
@@ -283,11 +303,12 @@ void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
 }
 
 void Game::executeUserCommand(Board& userBoard){
-    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true){
+    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true && userAction == 'C'){
         userSelectsMine();
     }
     else if (userAction == 'F'){
-        userFlags(userBoard);
+        userFlags(userBoard, userRow, userCol);
+        ++minesFound;
     }
     else if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
         userSelectsSafeSquare(userBoard, userRow, userCol);

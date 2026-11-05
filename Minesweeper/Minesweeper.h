@@ -47,13 +47,17 @@ class Board{
     Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates,
     // and make the squares constructed with those coordinates into mines
 
-    std::vector<std::vector<Square>> &get_boardSquares();
+    std::vector<std::vector<Square>> get_boardSquares();
     
     int get_numberOfMines();
     int get_width();
     int get_height();
 
     void displayBoard(); //generates board with flags and open squares
+    void setSquareFlag(int row, int col);
+    void setSquareMine(int row, int col);
+    void setSquareUncover(int row, int col);
+    void setSquareAdjacentMines(int row, int col);
     //void placeMines();
     //void placeNumbers(); //places numbers that indicate how many mines surround the square
 };
@@ -92,7 +96,7 @@ class Game{
     void promptUser();//prompts user to pick a square and specify
 
     void userSelectsMine();
-    void userFlags(Board& userBoard);
+    void userFlags(Board& userBoard, int row, int col);
     void userSelectsSafeSquare(Board& userBoard, int row, int col);
     void executeUserCommand(Board& userBoard);
 };
