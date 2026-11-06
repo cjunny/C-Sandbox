@@ -349,5 +349,6 @@ void Game::checkWinCondition(Board& userBoard){
     }
     else{
         std::cout << "Congratulations! You found all the mines. You win!" << std::flush;
+        gameState = false;
     }
 }
