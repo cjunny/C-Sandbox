@@ -27,7 +27,7 @@ class Square{//square on the board
 
     //Functions
     void setLocation(std::vector<int> coordinates);
-    void flagSquare();
+    void setFlagSquare(char userInput);
     void mineSquare();
     void uncoverSquare();
     void updateAdjacentMines(); //adds 1 to adjacentMines
@@ -54,22 +54,12 @@ class Board{
     int get_height();
 
     void displayBoard(); //generates board with flags and open squares
-    void setSquareFlag(int row, int col);
+    void setSquareFlag(int row, int col, char userInput);
     void setSquareMine(int row, int col);
     void setSquareUncover(int row, int col);
     void setSquareAdjacentMines(int row, int col);
     //void placeMines();
     //void placeNumbers(); //places numbers that indicate how many mines surround the square
-};
-
-class Flag{
-    private:
-    std::vector<int> flagLocation;
-
-    public:
-    std::vector<int> get_flagLocation();
-    void squareImmunity(); //prevents user from selecting a square with a flag on it
-
 };
 
 class Game{
@@ -93,10 +83,11 @@ class Game{
     void updateUserRow(int row);
     void updateUserCol(int col);
 
-    void promptUser();//prompts user to pick a square and specify
+    void promptUser(Board& userBoard);//prompts user to pick a square and specify
 
     void userSelectsMine();
-    void userFlags(Board& userBoard, int row, int col);
+    void userSetsFlag(Board& userBoard, int row, int col, char userInput);
     void userSelectsSafeSquare(Board& userBoard, int row, int col);
     void executeUserCommand(Board& userBoard);
+    void checkWinCondition();
 };

@@ -17,7 +17,7 @@ int main(){
 
     while (newGame.get_gameState()){
         newBoard.displayBoard();
-        newGame.promptUser();
+        newGame.promptUser(newBoard);
         newGame.executeUserCommand(newBoard);
     }
 }

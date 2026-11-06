@@ -46,8 +46,13 @@ void Square::setLocation(std::vector<int> coordinates){
     squareLocation = coordinates;
 }
 
-void Square::flagSquare(){
-    isFlag = true;
+void Square::setFlagSquare(char userInput){
+    if (userInput == 'F'){
+        isFlag = true;
+    }
+    else if (userInput == 'U'){
+        isFlag = false;
+    }
 }
 
 void Square::mineSquare(){
@@ -201,8 +206,8 @@ void Board::displayBoard(){
     }
 }
 
-void Board::setSquareFlag(int row, int col){
-    boardSquares[row][col].flagSquare();
+void Board::setSquareFlag(int row, int col, char userInput){
+    boardSquares[row][col].setFlagSquare(userInput);
 }
 
 void Board::setSquareMine(int row, int col){
@@ -252,8 +257,9 @@ void Game::updateUserCol(int col){
     userCol = col;
 }
 
-void Game::promptUser(){
+void Game::promptUser(Board& userBoard){
     std::cout << "Mines Found: " << minesFound << std::endl;
+    std::cout << "Mines Left: " << userBoard.get_numberOfMines() - minesFound << std::endl;
     std::cout << "You will be prompted to enter a row and column number to select a square." << std::endl;
     std::cout << "Then you will be prompted to enter the action you would like for that square." << std::endl;
     std::cout << "You can choose F to flag the square or C to click it" << std::endl;
@@ -270,8 +276,8 @@ void Game::userSelectsMine(){
     std::cout << "You selected a mine. You lose" << std::endl;
 }
 
-void Game::userFlags(Board& userBoard, int row, int col){
-    userBoard.setSquareFlag(row, col);
+void Game::userSetsFlag(Board& userBoard, int row, int col, char userInput){
+    userBoard.setSquareFlag(row, col, userInput);
 }
 
 void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
@@ -303,12 +309,21 @@ void Game::userSelectsSafeSquare(Board& userBoard, int row, int col){
 }
 
 void Game::executeUserCommand(Board& userBoard){
-    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true && userAction == 'C'){
+    if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == true && userAction == 'C' && userBoard.get_boardSquares()[userRow][userCol].get_isFlag() == false){
         userSelectsMine();
     }
+    else if (userAction == 'C' && userBoard.get_boardSquares()[userRow][userCol].get_isFlag() == true){
+        std::cout << "Invalid selection. Square is flagged." << std::endl;
+    }
     else if (userAction == 'F'){
-        userFlags(userBoard, userRow, userCol);
+        userSetsFlag(userBoard, userRow, userCol, userAction);
         ++minesFound;
+    }
+    else if (userAction == 'U'){
+        userSetsFlag(userBoard, userRow, userCol, userAction);
+        if (minesFound > 0){
+            minesFound = minesFound - 1;
+        }
     }
     else if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
         userSelectsSafeSquare(userBoard, userRow, userCol);
