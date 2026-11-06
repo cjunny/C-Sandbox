@@ -123,31 +123,6 @@ Board::Board(std::string gameMode)
             coordinateArray.erase(coordinateArray.begin() + mineLocation);
             arraySize = arraySize - 1;
             ++mine;
-
-            /*for(int i = 0; i < height; ++i){
-                for(int j = 0; j < width; ++j){
-                    if(coordinateArray[mineLocation] == boardSquares[i][j].get_squareLocation()){
-                        //change that square to a mine
-                        boardSquares[i][j].mineSquare(); //changes the square to a mine
-                        //takes location of mine and updates adjacent square count of surrounding mines
-                        //if square is a mine, does not add a count
-                        for (int mineRow = coordinateArray[mineLocation][0] - 1; mineRow < coordinateArray[mineLocation][0] + 2; ++mineRow){//in this loop make sure mine square doesn't change
-                            for (int mineCol = coordinateArray[mineLocation][1] - 1; mineRow < coordinateArray[mineLocation][1] + 2; ++mineCol){
-                                if(mineRow >= 0 && mineRow < height && mineCol >= 0 && mineCol < width)
-                                    if(boardSquares[mineRow][mineCol].get_isMine() == false){
-                                        boardSquares[mineRow][mineCol].updateAdjacentMines();
-                                    }
-                            }
-                        }
-                        shouldBreakAll = true;
-                        break;
-                    }
-                }
-                //BREAK FROM THE LOOP THAT IS GOING THROUGH THE COORDINATE VECTOR
-                if(shouldBreakAll){
-                    break;
-                }
-            }*/
         }
     }
 }
