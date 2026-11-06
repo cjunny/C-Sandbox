@@ -19,6 +19,7 @@ int main(){
         newBoard.displayBoard();
         newGame.promptUser(newBoard);
         newGame.executeUserCommand(newBoard);
+        newGame.checkWinCondition(newBoard);
     }
 
  

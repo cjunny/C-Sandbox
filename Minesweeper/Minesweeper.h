@@ -110,6 +110,7 @@ class Board{
     int get_height();
     int get_squaresUncovered();
     int get_squaresFlagged();
+    std::vector<std::vector<int>> get_allMineLocations();
 
     void displayBoard(); //generates board with flags and open squares
     void setSquareFlag(int row, int col, char userInput);
