@@ -70,30 +70,16 @@ void Square::updateAdjacentMines(){
 //Board Definitions
 
 //Constructor
-Board::Board(std::string gameMode){
-    if (gameMode == "easy"){
-        width = 9;
-        height = 9;
-        numberOfMines = 10;
-    };
-    if (gameMode == "medium"){
-        width = 16;
-        height = 16;
-        numberOfMines = 40;
-    };
-    if (gameMode == "hard"){
-        width = 30;
-        height = 16;
-        numberOfMines = 99;
-    };
+Board::Board(std::string gameMode)
+    : numberOfMines(determineNumberOfMines(gameMode)), 
+      totalNumberOfSquares(determineTotalNumberOfSquares(gameMode)),
+      width(determineWidth(gameMode)),
+      height(determineHeight(gameMode)) 
+{
+    //Declare square instances in board
+    boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(width));
 
-//Declare square instances in board
-
-boardSquares = std::vector<std::vector<Square>>(height, std::vector<Square>(width));
-std::vector<std::vector<int>> allMineLocations;
-
-//use curly to erase coordinateArray when finished
-
+    //use curly to erase coordinateArray when finished
     {
         //Generate a vector with all possible coordinates of the board vector<vector<int>>
         std::vector<std::vector<int>> coordinateArray;//first element in vector int will be row, second will be column
@@ -183,13 +169,21 @@ int Board::get_numberOfMines(){
     return numberOfMines;
 }
 
+int Board::get_squaresUncovered(){
+    return squaresUncovered;
+}
+
+int Board::get_squaresFlagged(){
+    return squaresFlagged;
+}
+
 void Board::displayBoard(){
     for (int row = 0; row < height; ++row){
         for (int col = 0; col < width; ++col){
             if(boardSquares[row][col].get_isUncovered() == true){
                 if (boardSquares[row][col].get_adjacentMines() == 0)
                 {
-                    std::cout << 'C';
+                    std::cout << 'U';
                 }
                 else{
                     std::cout << boardSquares[row][col].get_adjacentMines();
@@ -208,6 +202,12 @@ void Board::displayBoard(){
 
 void Board::setSquareFlag(int row, int col, char userInput){
     boardSquares[row][col].setFlagSquare(userInput);
+    if (userInput == 'F'){
+        ++squaresFlagged;
+    }
+    if (userInput == 'U'){
+        squaresFlagged = squaresFlagged - 1;
+    }
 }
 
 void Board::setSquareMine(int row, int col){
@@ -216,6 +216,7 @@ void Board::setSquareMine(int row, int col){
 
 void Board::setSquareUncover(int row, int col){
     boardSquares[row][col].uncoverSquare();
+    ++squaresUncovered;
 }
 
 void Board::setSquareAdjacentMines(int row, int col){
@@ -328,4 +329,8 @@ void Game::executeUserCommand(Board& userBoard){
     else if (userBoard.get_boardSquares()[userRow][userCol].get_isMine() == false){
         userSelectsSafeSquare(userBoard, userRow, userCol);
     }
+}
+
+void Game::checkWinCondition(Board& userBoard){
+    
 }

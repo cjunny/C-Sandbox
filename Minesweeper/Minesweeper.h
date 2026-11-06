@@ -38,20 +38,78 @@ class Square{//square on the board
 class Board{
     private:
     std::vector<std::vector<Square>> boardSquares = {}; //2D vector of squares that make up the board
-    int width; //width of the board
-    int height; //height of the board
-    int numberOfMines;
+    const int width; //width of the board
+    const int height; //height of the board
+    const int numberOfMines;
+    const int totalNumberOfSquares;
+    int squaresUncovered = 0;
+    int squaresFlagged = 0;
+    std::vector<std::vector<int>> allMineLocations;
+
+    static int determineNumberOfMines(std::string gameMode){
+        if (gameMode == "easy"){
+            return 10;
+        }
+        if (gameMode == "medium"){
+            return 40;
+        }
+        if (gameMode == "hard"){
+            return 99;
+        }
+    }
+
+    static int determineTotalNumberOfSquares(std::string gameMode){
+                if (gameMode == "easy"){
+            return 81; //9*9
+        }
+        if (gameMode == "medium"){
+            return 256; //16*16
+        }
+        if (gameMode == "hard"){
+            return 480; //30*16
+        }
+    }
+
+    static int determineWidth(std::string gameMode){
+        if (gameMode == "easy"){
+            return 9;
+        };
+        if (gameMode == "medium"){
+            return 16;
+        };
+        if (gameMode == "hard"){
+            return 30;
+        };
+
+    }
+
+    static int determineHeight(std::string gameMode){
+        if (gameMode == "easy"){
+            return 9;
+        };
+        if (gameMode == "medium" || gameMode == "hard"){
+            return 16;
+        };
+    }
+    
 
     public:
     //Constructor
-    Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates,
-    // and make the squares constructed with those coordinates into mines
+    Board(std::string gameMode) //within this constructor, using random number generator, randomnly generate mine coordinates, and make the squares constructed with those coordinates into mines
+        : numberOfMines(determineNumberOfMines(gameMode)), 
+          totalNumberOfSquares(determineTotalNumberOfSquares(gameMode)),
+          width(determineWidth(gameMode)),
+          height(determineHeight(gameMode))
+    {
 
+    } 
     std::vector<std::vector<Square>> get_boardSquares();
     
     int get_numberOfMines();
     int get_width();
     int get_height();
+    int get_squaresUncovered();
+    int get_squaresFlagged();
 
     void displayBoard(); //generates board with flags and open squares
     void setSquareFlag(int row, int col, char userInput);
@@ -89,5 +147,5 @@ class Game{
     void userSetsFlag(Board& userBoard, int row, int col, char userInput);
     void userSelectsSafeSquare(Board& userBoard, int row, int col);
     void executeUserCommand(Board& userBoard);
-    void checkWinCondition();
+    void checkWinCondition(Board& userBoard);
 };

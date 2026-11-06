@@ -20,4 +20,13 @@ int main(){
         newGame.promptUser(newBoard);
         newGame.executeUserCommand(newBoard);
     }
+
+ 
+    //Add win condition
+    //  minesFound we will keep as a characteristic of Game since it does not necessarily reflect the board, the user can make a mistake
+    //  let's add a totalNumberOfSquares, squaresUncovered counter and squares flagged counter to Board that we will use to check the win condition
+    //      if all mines are flagged AND the rest of the squares are uncovered, the user wins
+    
+    //We can potentially allow user to add multiple inputs with the same action to speed up the game
+    //change board to include numbers on the edges for row and column selection
 }
