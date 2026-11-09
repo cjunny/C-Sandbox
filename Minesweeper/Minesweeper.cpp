@@ -157,7 +157,9 @@ std::vector<std::vector<int>> Board::get_allMineLocations(){
 }
 
 void Board::displayBoard(){
+    std::cout << " 012345678" << std::endl;
     for (int row = 0; row < height; ++row){
+        std::cout << row;
         for (int col = 0; col < width; ++col){
             if(boardSquares[row][col].get_isUncovered() == true){
                 if (boardSquares[row][col].get_adjacentMines() == 0)
@@ -312,7 +314,7 @@ void Game::executeUserCommand(Board& userBoard){
 
 void Game::checkWinCondition(Board& userBoard){
     bool earlyBreak;
-    for (int i = 0; i < userBoard.get_numberOfMines() - 1; ++i){
+    for (int i = 0; i < userBoard.get_numberOfMines(); ++i){
         if (userBoard.get_boardSquares()[userBoard.get_allMineLocations()[i][0]][userBoard.get_allMineLocations()[i][1]].get_isFlag() == false){//if there is a square where there is a mine and it IS NOT flagged, we break; if it passes through entirely, they win
             earlyBreak = true;
             break;

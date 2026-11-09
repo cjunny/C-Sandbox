@@ -56,6 +56,7 @@ class Board{
         if (gameMode == "hard"){
             return 99;
         }
+        return 0;
     }
 
     static int determineTotalNumberOfSquares(std::string gameMode){
@@ -68,41 +69,38 @@ class Board{
         if (gameMode == "hard"){
             return 480; //30*16
         }
+        return 0;
     }
 
     static int determineWidth(std::string gameMode){
         if (gameMode == "easy"){
             return 9;
-        };
+        }
         if (gameMode == "medium"){
             return 16;
-        };
+        }
         if (gameMode == "hard"){
             return 30;
-        };
+        }
+        return 0;
 
     }
 
     static int determineHeight(std::string gameMode){
         if (gameMode == "easy"){
             return 9;
-        };
+        }
         if (gameMode == "medium" || gameMode == "hard"){
             return 16;
-        };
+        }
+        return 0;
     }
     
 
     public:
     //Constructor
-    Board(std::string gameMode) //within this constructor, using random number generator, randomnly generate mine coordinates, and make the squares constructed with those coordinates into mines
-        : numberOfMines(determineNumberOfMines(gameMode)), 
-          totalNumberOfSquares(determineTotalNumberOfSquares(gameMode)),
-          width(determineWidth(gameMode)),
-          height(determineHeight(gameMode))
-    {
-
-    } 
+    Board(std::string gameMode); //within this constructor, using random number generator, randomnly generate mine coordinates, and make the squares constructed with those coordinates into mines
+    
     std::vector<std::vector<Square>> get_boardSquares();
     
     int get_numberOfMines();
